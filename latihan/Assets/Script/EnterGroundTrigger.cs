@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class EnterGroundTrigger : MonoBehaviour
 {
-    [SerializeField] private string sceneToLoad; // Nama scene yang ingin diganti
+    [SerializeField] private string targetSceneName = "SampleScene"; // Nama scene yang ingin diganti
 
     private bool canLoadScene = false;
 
@@ -27,8 +27,13 @@ public class EnterGroundTrigger : MonoBehaviour
     {
         if (canLoadScene && Input.GetKeyDown(KeyCode.C)) // Ganti dengan input sesuai kebutuhan Anda
         {
-            // Ganti ke scene yang ditentukan jika pemain masuk ke dalam tanah dan menekan tombol yang sesuai
-            SceneManager.LoadScene(sceneToLoad);
+            // Simpan posisi pemain saat ini di PlayerPrefs
+            Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+            PlayerPrefs.SetFloat("PlayerPosX", playerPosition.x);
+            PlayerPrefs.SetFloat("PlayerPosY", playerPosition.y);
+
+            // Load target scene tanpa unload scene sebelumnya
+            SceneManager.LoadScene(targetSceneName);
         }
     }
 }
