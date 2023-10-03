@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class EnterUndergroundTrigger : MonoBehaviour
+public class EnterUnderGroundTrigger : MonoBehaviour
 {
     [SerializeField] private string targetSceneName = "SceneBawahTanah"; // Nama scene yang ingin diganti
 
@@ -27,20 +27,14 @@ public class EnterUndergroundTrigger : MonoBehaviour
     {
         if (canLoadScene && Input.GetKeyDown(KeyCode.C)) // Ganti dengan input sesuai kebutuhan Anda
         {
-            // Cek jika ada posisi pemain yang tersimpan di PlayerPrefs
-            if (PlayerPrefs.HasKey("PlayerPosX") && PlayerPrefs.HasKey("PlayerPosY"))
-            {
-                // Ambil posisi pemain dari PlayerPrefs
-                float playerPosX = PlayerPrefs.GetFloat("PlayerPosX");
-                float playerPosY = PlayerPrefs.GetFloat("PlayerPosY");
-
-                // Set posisi pemain
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                player.transform.position = new Vector3(playerPosX, playerPosY, player.transform.position.z);
-            }
+            // Simpan posisi respawn pemain ke PlayerPrefs
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            Vector3 respawnPosition = transform.Find("RespawnPointSample").position; // Mengambil posisi RespawnPointSample
+            PlayerPrefs.SetFloat("RespawnPosX", respawnPosition.x);
+            PlayerPrefs.SetFloat("RespawnPosY", respawnPosition.y);
 
             // Load target scene tanpa unload scene sebelumnya
-            SceneManager.LoadScene(targetSceneName);
+            SceneManager.LoadScene(targetSceneName, LoadSceneMode.Single); // "Single" untuk mengganti scene sebelumnya
         }
     }
 }

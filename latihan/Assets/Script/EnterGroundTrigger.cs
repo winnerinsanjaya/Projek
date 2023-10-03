@@ -27,13 +27,13 @@ public class EnterGroundTrigger : MonoBehaviour
     {
         if (canLoadScene && Input.GetKeyDown(KeyCode.C)) // Ganti dengan input sesuai kebutuhan Anda
         {
-            // Simpan posisi pemain saat ini di PlayerPrefs
-            Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-            PlayerPrefs.SetFloat("PlayerPosX", playerPosition.x);
-            PlayerPrefs.SetFloat("PlayerPosY", playerPosition.y);
+            // Simpan posisi pemain ke PlayerPrefs
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            PlayerPrefs.SetFloat("PlayerPosX", player.transform.position.x);
+            PlayerPrefs.SetFloat("PlayerPosY", player.transform.position.y);
 
             // Load target scene tanpa unload scene sebelumnya
-            SceneManager.LoadScene(targetSceneName);
+            SceneManager.LoadScene(targetSceneName, LoadSceneMode.Single); // "Single" untuk mengganti scene sebelumnya
         }
     }
 }

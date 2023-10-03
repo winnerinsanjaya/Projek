@@ -241,7 +241,7 @@ MonoBehaviour:
   roomCameraSpeed: 0
   player: {fileID: 920047663}
   aheadDistance: 2
-  cameraSpeed: 0.5
+  cameraSpeed: 1
 --- !u!81 &289125081
 AudioListener:
   m_ObjectHideFlags: 0
@@ -460,6 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: SimpleScene
+  respawnPoint: {fileID: 0}
 --- !u!1 &664071436
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,6 +986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: SimpleScene
+  respawnPoint: {fileID: 0}
 --- !u!61 &1087967967
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1096,7 +1098,7 @@ GameObject:
   - component: {fileID: 1516946427}
   m_Layer: 6
   m_Name: Tanah
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
