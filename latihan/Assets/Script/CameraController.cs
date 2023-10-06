@@ -1,33 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class CameraController : MonoBehaviour
 {
-    // Room camera
-    [SerializeField] private float roomCameraSpeed;
-    private float currentPosX;
-    private Vector3 velocity = Vector3.zero;
+   Transform target;
+   Vector3 velocity = Vector3.zero;
+   
+   [Range(0,1)]
+   public float smoothTime;
 
-    // Follow player
-    [SerializeField] private Transform player;
-    [SerializeField] private float aheadDistance;
-    [SerializeField] private float cameraSpeed;
-    private float lookAhead;
+   public Vector3 positionOffset;
 
-    private void Update()
-    {
-        // Room camera
-        //transform.position = Vector3.SmoothDamp(transform.position, new Vector3(currentPosX, transform.position.y, transform.position.z), ref velocity, roomCameraSpeed * Time.deltaTime);
+   private void Awake()
+   {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+   }
 
-        // Follow player
-        float targetX = player.position.x + lookAhead;
-        transform.position = new Vector3(targetX, transform.position.y, transform.position.z);
-
-        // Update lookAhead
-        lookAhead = Mathf.Lerp(lookAhead, aheadDistance * Mathf.Sign(player.localScale.x), Time.deltaTime * cameraSpeed);
-    }
-
-    public void MoveToNewRoom(Transform newRoom)
-    {
-        currentPosX = newRoom.position.x;
-    }
+   private void LateUpdate()
+   {
+        Vector3 targetPosition = target.position+positionOffset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+   }
 }
