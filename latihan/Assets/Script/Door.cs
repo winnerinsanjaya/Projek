@@ -7,6 +7,7 @@ public class Door : MonoBehaviour
     public Transform doorTransform;   // Transform objek pintu
     public float openDistance = 2.0f; // Jarak maksimum untuk membuka pintu
     public float openSpeed = 2.0f;    // Kecepatan membuka pintu
+    public Transform player;          // Transform pemain
     private Vector3 initialPosition;  // Posisi awal pintu
     private bool isOpen = false;      // Status pintu terbuka/tidak
 
@@ -17,7 +18,9 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        float distanceToPlayer = Vector3.Distance(player.position, doorTransform.position);
+
+        if (Input.GetKeyDown(KeyCode.C) && distanceToPlayer <= openDistance)
         {
             if (!isOpen)
             {
