@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bergerak : MonoBehaviour
 {
     Rigidbody2D rb;
+    public float moveSpeed = 5f;
     public float jalan;
     public float lompatan;
     public float cekRadius;
