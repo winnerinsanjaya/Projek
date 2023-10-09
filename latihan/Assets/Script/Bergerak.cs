@@ -35,13 +35,6 @@ public class Bergerak : MonoBehaviour
             rb.velocity = new Vector2(gerak * jalan, rb.velocity.y);
             rb.gravityScale = 4f; // Set gravitasi kembali ke nilai awal jika tidak berada di tangga
         }
-
-        // Jika pemain melompat, atur isJumping menjadi true
-        if (Input.GetButtonDown("Jump") && injakTanah)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, lompatan);
-        }
-
         // Membalikkan sprite jika bergerak ke kiri
         if (gerak < 0)
         {
@@ -56,6 +49,11 @@ public class Bergerak : MonoBehaviour
 
     void Update()
     {
+        // Jika pemain melompat, atur isJumping menjadi true
+        if (Input.GetButtonDown("Jump") && injakTanah)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, lompatan);
+        }
         // Tangani naik dan turun tangga hanya jika pemain menekan tombol 'W' atau 'S'
         float verticalInput = Input.GetAxis("Vertical");
         if (verticalInput != 0 && isClimbing)

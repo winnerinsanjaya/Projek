@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100f;
     private float currentHealth;
+    private Vector3 respawnPoint; // Posisi respawn pemain
+
     [SerializeField] private HealthBarUI healthBar;
     [SerializeField] private float slowDuration = 2f; // Durasi efek slow dalam detik
     [SerializeField] private float slowFactor = 0.5f; // Faktor slow (0.5 = 50% slower)
@@ -29,6 +32,34 @@ public class PlayerHealth : MonoBehaviour
             isSlowed = false;
             bergerak.jalan = originalMoveSpeed; // Kembalikan kecepatan pemain ke nilai aslinya
         }
+
+        // Check jika darah mencapai 0
+        if (currentHealth <= 0)
+        {
+            // Panggil fungsi RespawnPlayer
+            RespawnPlayer();
+        }
+    }
+
+    // Fungsi untuk respawn pemain
+    private void RespawnPlayer()
+    {
+        // Reset posisi pemain ke checkpoint
+        transform.position = respawnPoint;
+
+        // Reset ulang darah pemain
+        currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth);
+    }
+
+    public void SetRespawnPoint(Vector3 checkpointPosition)
+    {
+        respawnPoint = checkpointPosition;
+    }
+
+    public Vector3 GetRespawnPoint()
+    {
+        return respawnPoint;
     }
 
     public void TakeDamage(float damageAmount)
