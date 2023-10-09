@@ -8,8 +8,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float slowDuration = 2f; // Durasi efek slow dalam detik
     [SerializeField] private float slowFactor = 0.5f; // Faktor slow (0.5 = 50% slower)
 
-    private bool isSlowed = false;
     private float originalMoveSpeed;
+    private bool isSlowed = false;
+    private float slowEndTime;
 
     private Bergerak bergerak; // Tambahkan referensi ke komponen PlayerMovement
 
@@ -18,20 +19,15 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         bergerak = GetComponent<Bergerak>(); // Ambil komponen PlayerMovement
-        originalMoveSpeed = bergerak.moveSpeed; // Simpan kecepatan awal pemain
+        originalMoveSpeed = bergerak.jalan; // Simpan kecepatan awal pemain
     }
 
     private void Update()
     {
-        if (isSlowed)
+        if (isSlowed && Time.time >= slowEndTime)
         {
-            // Mengurangi efek slow setelah durasi berakhir
-            slowDuration -= Time.deltaTime;
-            if (slowDuration <= 0f)
-            {
-                isSlowed = false;
-                bergerak.moveSpeed = originalMoveSpeed; // Kembalikan kecepatan pemain ke nilai aslinya
-            }
+            isSlowed = false;
+            bergerak.jalan = originalMoveSpeed; // Kembalikan kecepatan pemain ke nilai aslinya
         }
     }
 
@@ -41,9 +37,10 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
 
-        // Aktifkan efek slow
+        // Selalu aktifkan efek slow ketika terkena trap
         isSlowed = true;
-        bergerak.moveSpeed *= slowFactor; // Mengurangi kecepatan pemain
+        bergerak.jalan *= slowFactor; // Mengurangi kecepatan pemain
+        slowEndTime = Time.time + slowDuration; // Waktu berakhirnya efek slow
     }
 
     public void Heal(float healAmount)
@@ -58,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("ObstacleTrap"))
         {
             TakeDamage(10f);
-            Destroy(other.gameObject);
+            // Destroy(other.gameObject);
         }
         else if (other.CompareTag("HealingItem"))
         {
