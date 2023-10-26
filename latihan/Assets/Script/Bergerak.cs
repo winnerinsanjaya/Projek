@@ -13,6 +13,12 @@ public class Bergerak : MonoBehaviour
     private bool isClimbing = false;
     public float climbSpeed = 3f; // Kecepatan naik turun tangga
 
+    public float dashDistance = 5f; // Jarak yang akan ditempuh selama "dash"
+    private bool isDashing = false; // Status apakah karakter sedang "dash"
+    private float dashEndTime; // Waktu berakhirnya "dash"
+    public float dashCooldown = 3f; // Waktu cooldown antara "dash"
+    private float nextDashTime = 0f; // Waktu kapan karakter dapat "dash" lagi
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -32,9 +38,24 @@ public class Bergerak : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2(gerak * jalan, rb.velocity.y);
-            rb.gravityScale = 4f; // Set gravitasi kembali ke nilai awal jika tidak berada di tangga
+            // Mengecek apakah karakter sedang "dash"
+            if (isDashing)
+            {
+                rb.velocity = new Vector2(cekArahBergerak() * dashDistance, rb.velocity.y);
+
+                // Anda juga dapat mengatur waktu "dash" sesuai kebutuhan
+                if (Time.time >= dashEndTime)
+                {
+                    isDashing = false;
+                }
+            }
+            else
+            {
+                rb.velocity = new Vector2(gerak * jalan, rb.velocity.y);
+                rb.gravityScale = 4f; // Set gravitasi kembali ke nilai awal jika tidak berada di tangga
+            }
         }
+
         // Membalikkan sprite jika bergerak ke kiri
         if (gerak < 0)
         {
@@ -54,11 +75,11 @@ public class Bergerak : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, lompatan);
         }
-        // Tangani naik dan turun tangga hanya jika pemain menekan tombol 'W' atau 'S'
-        float verticalInput = Input.GetAxis("Vertical");
-        if (verticalInput != 0 && isClimbing)
+
+        // Tangani input untuk "dash" (misalnya, tombol "Shift")
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= nextDashTime)
         {
-            rb.velocity = new Vector2(rb.velocity.x, verticalInput * climbSpeed);
+            Dash();
         }
     }
 
@@ -76,5 +97,28 @@ public class Bergerak : MonoBehaviour
         {
             isClimbing = false;
         }
+    }
+
+    private void Dash()
+    {
+        isDashing = true;
+        // Menentukan waktu berakhirnya "dash" berdasarkan waktu sekarang
+        dashEndTime = Time.time + dashDuration;
+
+        // Mengatur waktu cooldown berdasarkan waktu berakhirnya "dash"
+        nextDashTime = dashEndTime + dashCooldown;
+    }
+
+    private float dashDuration = 0.1f; // Durasi "dash" dalam detik
+
+    private float cekArahBergerak()
+    {
+        // Mengecek arah bergerak karakter (1 untuk kanan, -1 untuk kiri)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        if (horizontalInput > 0.01f)
+            return 1;
+        else if (horizontalInput < -0.01f)
+            return -1;
+        return 0;
     }
 }
