@@ -878,8 +878,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 30.074898, y: -0.00035432278}
-  m_SizeDelta: {x: -30.0748, y: 0}
+  m_AnchoredPosition: {x: 30.074898, y: -0.0008979644}
+  m_SizeDelta: {x: -59.9369, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &400943519
 MonoBehaviour:
@@ -934,7 +934,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollbar: {fileID: 1399568837}
-  scrollSpeed: 0.1
 --- !u!1 &429264404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,8 +1971,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -149.594, y: 31.819916}
-  m_SizeDelta: {x: 825.6309, y: 919.5935}
+  m_AnchoredPosition: {x: -292.06238, y: -154.60754}
+  m_SizeDelta: {x: 540.6852, y: 684.5508}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1432145024
 MonoBehaviour:

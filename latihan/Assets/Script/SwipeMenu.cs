@@ -10,7 +10,8 @@ public class SwipeMenu : MonoBehaviour
     private float distance;
     private int posLength;
 
-    public float scrollSpeed = 0.1f;
+    private float scrollSpeed = 0.25f;
+    private float scrollStep = 0.25f; // Kenaikan nilai saat scrolling
 
     private void Start()
     {
@@ -29,47 +30,52 @@ public class SwipeMenu : MonoBehaviour
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
         float arrowInput = Input.GetAxis("Vertical");
         float scroll_pos = 1 - scrollbar.value;
-        float scrollChange = -scrollInput * scrollSpeed + arrowInput;
-        scroll_pos = Mathf.Clamp(scroll_pos + scrollChange, 0f, 1f);
 
-        bool adjustedScrollPos = false; // Untuk menandai apakah scroll_pos telah diubah
+        // Menghitung perubahan nilai scroll_pos
+        float scrollChange = (-scrollInput * scrollSpeed + arrowInput) * scrollSpeed;
 
-        for (int i = 0; i < posLength; i++)
+        // Menaikkan atau menurunkan value sesuai dengan scrollChange
+        if (scrollChange > 0)
         {
-            if (scrollChange > 0 && scroll_pos < pos[i] + (distance / 2) && scroll_pos > pos[i] - (distance / 2))
-            {
-                scroll_pos = pos[i] - 0.01f; // Mengurangi scroll_pos untuk melambatkan pergerakan ke atas
-                adjustedScrollPos = true;
-                break; // Keluar dari loop
-            }
-            else if (scrollChange < 0 && scroll_pos > pos[i] - (distance / 2) && scroll_pos < pos[i] + (distance / 2))
-            {
-                scroll_pos = pos[i] + 0.01f; // Menambah scroll_pos untuk melambatkan pergerakan ke bawah
-                adjustedScrollPos = true;
-                break; // Keluar dari loop
-            }
+            scrollbar.value = Mathf.Clamp(scrollbar.value + scrollStep, 0f, 1f);
+        }
+        else if (scrollChange < 0)
+        {
+            scrollbar.value = Mathf.Clamp(scrollbar.value - scrollStep, 0f, 1f);
         }
 
-        if (!adjustedScrollPos)
-        {
-            scrollbar.value = 1 - scroll_pos;
-        }
+        int closestElementIndex = FindClosestElementIndex(1 - scrollbar.value);
 
         for (int i = 0; i < posLength; i++)
         {
             scroll_pos = 1 - scrollbar.value;
 
-            if (scroll_pos < pos[i] + (distance / 2) && scroll_pos > pos[i] - (distance / 2))
+            if (i == closestElementIndex)
             {
                 transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(1f, 1f), 0.1f);
-                for (int a = 0; a < posLength; a++)
-                {
-                    if (a != i)
-                    {
-                        transform.GetChild(a).localScale = Vector2.Lerp(transform.GetChild(a).localScale, new Vector2(0.8f, 0.8f), 0.1f);
-                    }
-                }
+            }
+            else
+            {
+                transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(0.8f, 0.8f), 0.1f);
             }
         }
+    }
+
+    private int FindClosestElementIndex(float scrollPos)
+    {
+        int closestIndex = 0;
+        float closestDistance = float.MaxValue;
+
+        for (int i = 0; i < posLength; i++)
+        {
+            float elementDistance = Mathf.Abs(pos[i] - scrollPos);
+            if (elementDistance < closestDistance)
+            {
+                closestDistance = elementDistance;
+                closestIndex = i;
+            }
+        }
+
+        return closestIndex;
     }
 }
