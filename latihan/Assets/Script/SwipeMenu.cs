@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SwipeMenu : MonoBehaviour
 {
+
     public Scrollbar scrollbar;
     private float[] pos;
     private float distance;

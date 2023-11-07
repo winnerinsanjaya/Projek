@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class Bergerak : MonoBehaviour
 {
+    private bool isWalking;
+
     Rigidbody2D rb;
+    private Animator anim;
+
     SpriteRenderer spriteRenderer;
     public float jalan;
     public float lompatan;
@@ -21,6 +25,7 @@ public class Bergerak : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -29,6 +34,16 @@ public class Bergerak : MonoBehaviour
     {
         injakTanah = Physics2D.OverlapCircle(cekTanah.position, cekRadius, apaItuTanah);
         float gerak = Input.GetAxis("Horizontal");
+
+        if (rb.velocity.x != 0)
+        {
+            isWalking = true;
+        }
+        else
+        {
+
+            isWalking = false;
+        }
 
         if (isClimbing)
         {
@@ -54,6 +69,9 @@ public class Bergerak : MonoBehaviour
                 rb.velocity = new Vector2(gerak * jalan, rb.velocity.y);
                 rb.gravityScale = 4f; // Set gravitasi kembali ke nilai awal jika tidak berada di tangga
             }
+
+
+       
         }
 
         // Membalikkan sprite jika bergerak ke kiri
@@ -70,6 +88,7 @@ public class Bergerak : MonoBehaviour
 
     void Update()
     {
+        UpdateAnimations();
         // Jika pemain melompat, atur isJumping menjadi true
         if (Input.GetButtonDown("Jump") && injakTanah)
         {
@@ -81,6 +100,11 @@ public class Bergerak : MonoBehaviour
         {
             Dash();
         }
+    }
+
+    private void UpdateAnimations()
+    {
+        anim.SetBool("isWalking",isWalking);
     }
 
     void OnTriggerEnter2D(Collider2D other)
