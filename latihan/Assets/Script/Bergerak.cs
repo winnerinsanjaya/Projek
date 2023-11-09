@@ -105,6 +105,8 @@ public class Bergerak : MonoBehaviour
     private void UpdateAnimations()
     {
         anim.SetBool("isWalking",isWalking);
+        anim.SetBool("isGrounded",injakTanah);
+        anim.SetFloat("yVelocity",rb.velocity.y);
     }
 
     void OnTriggerEnter2D(Collider2D other)
