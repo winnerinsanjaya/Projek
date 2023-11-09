@@ -147,8 +147,4 @@ public class Bergerak : MonoBehaviour
             return -1;
         return 0;
     }
-    public int GetFacingDirection()
-    {
-        return facingDirection;
-    }
 }
