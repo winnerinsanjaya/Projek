@@ -8,6 +8,7 @@ TagManager:
   - ObstacleTrap
   - HealingItem
   - Checkpoint
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - tanah
   - Player
   - Enemy
-  - 
-  - 
+  - Damageable
+  - Dead
   - 
   - 
   - 
@@ -44,4 +45,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 2908981897
     locked: 0
