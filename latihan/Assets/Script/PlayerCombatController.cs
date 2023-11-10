@@ -67,10 +67,22 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision detected!");
+
+        var enemy = collision.collider.GetComponent<EnemyFollowPlayer>();
+        if (enemy)
+        {
+            enemy.TakeHit(1);
+            Debug.Log("Enemy hit!");
+        }
+    }
+
+
     private void CheckAttackHitBox()
     {
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitBoxPos.position, attack1Radius, whatIsDamageable);
-
         foreach (Collider2D collider in detectedObjects)
         {
             collider.transform.parent.SendMessage("Damage", attack1Damage);

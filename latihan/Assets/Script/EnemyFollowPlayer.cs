@@ -14,10 +14,28 @@ public class EnemyFollowPlayer : MonoBehaviour
     private bool isAttacking = false;
     private float timeSinceLastAttack = 0.0f;
 
+    public float Hitpoints;
+    public float Maxhitpoints = 5;
+    public HealthbarBehaviour Healthbar;
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        Hitpoints = Maxhitpoints;
+        Healthbar.SetHealth(Hitpoints, Maxhitpoints);
+
+        
+    }
+
+    public void TakeHit(float damage)
+    {
+        Hitpoints -= damage;
+
+        if (Hitpoints <= 0) 
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
