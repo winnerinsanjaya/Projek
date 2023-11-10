@@ -4439,9 +4439,9 @@ GameObject:
   - component: {fileID: 1174923399}
   - component: {fileID: 1174923398}
   - component: {fileID: 1174923397}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: enemy1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4459,7 +4459,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2.23
-  lineOfsite: 2.8
+  lineOfSight: 3.97
+  attackRange: 2.04
+  attackCooldown: 1.37
+  preAttackDuration: 1
+  damageAmount: 10
 --- !u!212 &1174923398
 SpriteRenderer:
   m_ObjectHideFlags: 0

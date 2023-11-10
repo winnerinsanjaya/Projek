@@ -6,11 +6,11 @@ public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100f;
     private float currentHealth;
-    private Vector3 respawnPoint; // Posisi respawn pemain
+    private Vector3 respawnPoint;
 
     [SerializeField] private HealthBarUI healthBar;
-    [SerializeField] private float slowDuration = 2f; // Durasi efek slow dalam detik
-    [SerializeField] private float slowFactor = 0.5f; // Faktor slow (0.5 = 50% slower)
+    [SerializeField] private float slowDuration = 2f;
+    [SerializeField] private float slowFactor = 0.5f;
 
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration;
@@ -20,15 +20,16 @@ public class PlayerHealth : MonoBehaviour
     private float originalMoveSpeed;
     private bool isSlowed = false;
     private float slowEndTime;
+    private bool isTrap = false; // Tambahkan variabel untuk menandai apakah pemain terkena jebakan
 
-    private Bergerak bergerak; // Tambahkan referensi ke komponen PlayerMovement
+    private Bergerak bergerak;
 
     private void Start()
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
-        bergerak = GetComponent<Bergerak>(); // Ambil komponen PlayerMovement
-        originalMoveSpeed = bergerak.jalan; // Simpan kecepatan awal pemain
+        bergerak = GetComponent<Bergerak>();
+        originalMoveSpeed = bergerak.jalan;
         spriteRend = GetComponent<SpriteRenderer>();
     }
 
@@ -37,24 +38,18 @@ public class PlayerHealth : MonoBehaviour
         if (isSlowed && Time.time >= slowEndTime)
         {
             isSlowed = false;
-            bergerak.jalan = originalMoveSpeed; // Kembalikan kecepatan pemain ke nilai aslinya
+            bergerak.jalan = originalMoveSpeed;
         }
 
-        // Check jika darah mencapai 0
         if (currentHealth <= 0)
         {
-            // Panggil fungsi RespawnPlayer
             RespawnPlayer();
         }
     }
 
-    // Fungsi untuk respawn pemain
     private void RespawnPlayer()
     {
-        // Reset posisi pemain ke checkpoint
         transform.position = respawnPoint;
-
-        // Reset ulang darah pemain
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth);
     }
@@ -74,12 +69,14 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damageAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
-        StartCoroutine(Invunerability());
-        
-        // Selalu aktifkan efek slow ketika terkena trap
-        isSlowed = true;
-        bergerak.jalan *= slowFactor; // Mengurangi kecepatan pemain
-        slowEndTime = Time.time + slowDuration; // Waktu berakhirnya efek slow
+        StartCoroutine(Invulnerability());
+
+        if (isTrap)
+        {
+            isSlowed = true;
+            bergerak.jalan *= slowFactor;
+            slowEndTime = Time.time + slowDuration;
+        }
     }
 
     public void Heal(float healAmount)
@@ -93,19 +90,23 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("ObstacleTrap"))
         {
+            isTrap = true; // Set isTrap menjadi true ketika terkena jebakan
             TakeDamage(10f);
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("HealingItem"))
         {
+            isTrap = false; // Set isTrap menjadi false ketika mendapatkan item penyembuh
             Heal(60f);
             Destroy(other.gameObject);
         }
     }
 
-    private IEnumerator Invunerability()
+    private IEnumerator Invulnerability()
     {
+      
         Physics2D.IgnoreLayerCollision(7, 8, true);
+
         for (int i = 0; i < numberOfFlashes; i++)
         {
             spriteRend.color = new Color(1, 0, 0, 0.5f);
@@ -113,6 +114,7 @@ public class PlayerHealth : MonoBehaviour
             spriteRend.color = Color.white;
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
+
         Physics2D.IgnoreLayerCollision(7, 8, false);
     }
 }
