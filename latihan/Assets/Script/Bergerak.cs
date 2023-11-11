@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bergerak : MonoBehaviour
 {
     private bool isWalking;
+    private int facingDirection = 1;
 
     Rigidbody2D rb;
     private Animator anim;
@@ -147,4 +148,8 @@ public class Bergerak : MonoBehaviour
             return -1;
         return 0;
     }
+    public int GetFacingDirection()
+{
+    return facingDirection;
+}
 }
