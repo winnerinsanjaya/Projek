@@ -20,6 +20,7 @@ public class PlayerHealth : MonoBehaviour
     private float originalMoveSpeed;
     private bool isSlowed = false;
     private float slowEndTime;
+
     private bool isTrap = false; // Tambahkan variabel untuk menandai apakah pemain terkena jebakan
 
     private Bergerak bergerak;
@@ -71,6 +72,7 @@ public class PlayerHealth : MonoBehaviour
         healthBar.SetHealth(currentHealth);
         StartCoroutine(Invulnerability());
 
+        // Hanya terapkan efek slow jika pemain terkena trap
         if (isTrap)
         {
             isSlowed = true;
@@ -84,19 +86,22 @@ public class PlayerHealth : MonoBehaviour
         currentHealth += healAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
+
+        // Setelah sembuh, reset kondisi trap
+        isTrap = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("ObstacleTrap"))
         {
-            isTrap = true; // Set isTrap menjadi true ketika terkena jebakan
+            isTrap = true;
             TakeDamage(10f);
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("HealingItem"))
         {
-            isTrap = false; // Set isTrap menjadi false ketika mendapatkan item penyembuh
+            isTrap = false;
             Heal(60f);
             Destroy(other.gameObject);
         }
@@ -104,7 +109,6 @@ public class PlayerHealth : MonoBehaviour
 
     private IEnumerator Invulnerability()
     {
-      
         Physics2D.IgnoreLayerCollision(7, 8, true);
 
         for (int i = 0; i < numberOfFlashes; i++)

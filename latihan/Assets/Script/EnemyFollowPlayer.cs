@@ -79,6 +79,8 @@ public class EnemyFollowPlayer : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
+    // ...
+
     IEnumerator PreAttack()
     {
         isAttacking = true;
@@ -95,4 +97,7 @@ public class EnemyFollowPlayer : MonoBehaviour
     {
         player.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
     }
+
+    // ...
+
 }
