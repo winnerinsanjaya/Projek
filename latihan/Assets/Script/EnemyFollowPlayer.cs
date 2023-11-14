@@ -9,15 +9,26 @@ public class EnemyFollowPlayer : MonoBehaviour
     public float attackRange;
     public float attackCooldown = 2.0f;
     public float preAttackDuration = 1.0f;
-    public float damageAmount = 10f; // Tambahkan variabel untuk jumlah damage yang diberikan musuh
+
     private Transform player;
     private bool isAttacking = false;
     private float timeSinceLastAttack = 0.0f;
+
+    // Variabel untuk ukuran dan damage enemy
+    private float originalSize;
+    private float currentDamage = 10f; // Damage awal
+    private float sizeIncreaseAmount = 0.1f; // Jumlah peningkatan ukuran setiap kali menyerang
+    private float damageIncreaseAmount = 5f; // Jumlah peningkatan damage setiap kali menyerang
+    private int attackCount = 0; // Jumlah serangan yang sudah dilakukan
+
+    // Maksimal serangan yang diizinkan
+    private int maxAttacks = 3;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        originalSize = transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -61,8 +72,6 @@ public class EnemyFollowPlayer : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    // ...
-
     IEnumerator PreAttack()
     {
         isAttacking = true;
@@ -77,9 +86,17 @@ public class EnemyFollowPlayer : MonoBehaviour
 
     void AttackPlayer()
     {
-        player.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
+        // Menambahkan damage dan ukuran setiap kali menyerang
+        if (attackCount < maxAttacks)
+        {
+            currentDamage += damageIncreaseAmount;
+            float newSize = transform.localScale.x + sizeIncreaseAmount;
+            transform.localScale = new Vector3(newSize, newSize, 1f);
+
+            attackCount++;
+        }
+
+        // Menyerang pemain dengan damage yang baru
+        player.GetComponent<PlayerHealth>().TakeDamage(currentDamage);
     }
-
-    // ...
-
 }
