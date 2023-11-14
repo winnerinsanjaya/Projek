@@ -5020,7 +5020,7 @@ GameObject:
   - component: {fileID: 1359855743}
   - component: {fileID: 1359855742}
   - component: {fileID: 1359855741}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Trap
   m_TagString: ObstacleTrap
   m_Icon: {fileID: 0}

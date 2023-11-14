@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyFollowPlayer : MonoBehaviour
@@ -97,6 +96,6 @@ public class EnemyFollowPlayer : MonoBehaviour
         }
 
         // Menyerang pemain dengan damage yang baru
-        player.GetComponent<PlayerHealth>().TakeDamage(currentDamage);
+        player.GetComponent<PlayerHealth>().TakeDamage(currentDamage, false); // Ubah parameter kedua menjadi false
     }
 }

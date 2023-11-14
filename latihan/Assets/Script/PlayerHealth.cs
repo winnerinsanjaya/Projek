@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
@@ -21,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
     private bool isSlowed = false;
     private float slowEndTime;
 
-    private bool isTrap = false; // Tambahkan variabel untuk menandai apakah pemain terkena jebakan
+    private bool isTrap = false;
 
     private Bergerak bergerak;
 
@@ -65,14 +64,13 @@ public class PlayerHealth : MonoBehaviour
         return respawnPoint;
     }
 
-    public void TakeDamage(float damageAmount)
+    public void TakeDamage(float damageAmount, bool isTrap)
     {
         currentHealth -= damageAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
         StartCoroutine(Invulnerability());
 
-        // Hanya terapkan efek slow jika pemain terkena trap
         if (isTrap)
         {
             isSlowed = true;
@@ -87,7 +85,6 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
 
-        // Setelah sembuh, reset kondisi trap
         isTrap = false;
     }
 
@@ -96,7 +93,7 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("ObstacleTrap"))
         {
             isTrap = true;
-            TakeDamage(10f);
+            TakeDamage(10f, isTrap);
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("HealingItem"))
