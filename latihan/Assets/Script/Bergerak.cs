@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Bergerak : MonoBehaviour
 {
+    public Transform attackPos;
+    float attackPosX;
     private bool isWalking;
     private int facingDirection = 1;
 
@@ -29,6 +32,7 @@ public class Bergerak : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        attackPosX = attackPos.localPosition.x;
     }
 
     private void FixedUpdate()
@@ -79,11 +83,13 @@ public class Bergerak : MonoBehaviour
         if (gerak < 0)
         {
             spriteRenderer.flipX = true;
+            attackPos.localPosition = new Vector2(attackPosX * -1, attackPos.localPosition.y);
         }
         // Mengembalikan sprite ke arah semula jika bergerak ke kanan
         else if (gerak > 0)
         {
             spriteRenderer.flipX = false;
+            attackPos.localPosition = new Vector2(attackPosX, attackPos.localPosition.y);
         }
     }
 
